@@ -68,6 +68,40 @@ def run():
 			client_socket.sendall(json.dumps(request).encode('utf-8'))
 			client_socket.close()
 			break
+		elif command_args[0] == "%groups":
+			request = {"command": "%groups"}
+			client_socket.sendall(json.dumps(request).encode('utf-8'))
+		elif command_args[0] == "%groupjoin":
+			if len(command_args) != 2:
+				print("usage: %groupjoin <group_name>")
+				continue
+			request = {"command": "%groupjoin", "group": command_args[1]}
+			client_socket.sendall(json.dumps(request).encode('utf-8'))
+		elif command_args[0] == "%grouppost":
+			post_command_args = command.split(";")
+			if len(post_command_args) != 4:
+				print("usage: %grouppost ; <groupname> ; <subject> ; <message> ; ")
+				continue
+			request = {"command": "%grouppost", "group": post_command_args[1].strip(), "subject": post_command_args[2].strip(), "message": post_command_args[3].strip()}
+			client_socket.sendall(json.dumps(request).encode('utf-8'))
+		elif command_args[0] == "%groupusers":
+			if len(command_args) != 2:
+				print("usage: %groupusers <group_name>")
+				continue
+			request = {"command": "%groupusers", "group": command_args[1]}
+			client_socket.sendall(json.dumps(request).encode('utf-8'))
+		elif command_args[0] == "%groupleave":
+			if len(command_args) != 2:
+				print("usage: %groupleave <group_name>")
+				continue
+			request = {"command": "%groupleave", "group": command_args[1]}
+			client_socket.sendall(json.dumps(request).encode('utf-8'))
+		elif command_args[0] == "%groupmessage":
+			if len(command_args) != 3:
+				print("usage: %groupmessage <group_name> <message_id>")
+				continue
+			request = {"command": "%groupmessage", "group": command_args[1], "message_id": int(command_args[2])}
+			client_socket.sendall(json.dumps(request).encode('utf-8'))
 		else:
 			# username being sent
 			client_socket.sendall(command.encode('utf-8'))
