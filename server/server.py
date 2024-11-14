@@ -65,7 +65,13 @@ class Server:
 						group = request["group"]
 						message_id = request["message_id"]
 						self.bulletinboards[group]._groupmessage(username, message_id)
-
+					case "%exit":
+						for group in self.bulletinboards:
+							if username in self.bulletinboards[group].members:
+								self.bulletinboards[group]._groupleave(username)
+					case "%groups":
+						groups = ', '.join(self.bulletinboards.keys())
+						conn.sendall(f"avaliable groups: {groups}".encode('utf-8'))
 
 			except:
 				break
@@ -73,3 +79,8 @@ class Server:
 if __name__ == "__main__":
 	server = Server()
 	server.run()
+	
+# TODO:
+# block users from sending a message to a group they aren't in
+# add functionality to show users prev 2 messages when they join a group
+# debug everything
