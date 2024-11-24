@@ -61,7 +61,7 @@ class BulletinBoard:
 
 		conn = self.members[username]
 		if len(self.messages) >= 2:
-			conn.sendall(self.messages[len(self.messages) - 1].encode('utf-8'))
 			conn.sendall(self.messages[len(self.messages) - 2].encode('utf-8'))
+			conn.sendall(self.messages[len(self.messages) - 1].encode('utf-8'))
 		elif len(self.messages) == 1:
 			conn.sendall(self.messages[0].encode('utf-8'))
