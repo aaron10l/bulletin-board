@@ -53,3 +53,15 @@ class BulletinBoard:
 			conn.sendall(f"message not found, should be in the range 1 - {len(self.messages)}, inclusive.\n".encode('utf-8'))
 
 	# helper functions start here..
+
+	def _send_prev_two_messages(self, username):
+		"""
+		sends the user the previous two messages. if less than two messages, send all available messages
+		"""
+
+		conn = self.members[username]
+		if len(self.messages) >= 2:
+			conn.sendall(self.messages[len(self.messages) - 1].encode('utf-8'))
+			conn.sendall(self.messages[len(self.messages) - 2].encode('utf-8'))
+		elif len(self.messages) == 1:
+			conn.sendall(self.messages[0].encode('utf-8'))

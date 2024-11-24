@@ -50,6 +50,7 @@ class Server:
 					case "%groupjoin":
 						self.bulletinboards[request["group"]]._groupjoin(username, conn)
 						self.bulletinboards[request["group"]]._groupusers()
+						self.bulletinboards[request["group"]]._send_prev_two_messages(username)
 					case "%grouppost":
 						subject = request["subject"]
 						message = request["message"]
