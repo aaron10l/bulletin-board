@@ -14,13 +14,19 @@ class BulletinBoard:
 		"""
 		adds a message to the group. also sends the message to everyone in the group
 		"""
+		if username not in self.members:
+			raise PermissionError(f"User '{username}' is not a member of this group.")
+
 		post_id = len(self.messages) + 1
 		post_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		post = f"{post_id}, {username}, {post_date}, {subject}, {message}"
 		post_thumbnail = f"{post_id}, {username}, {post_date}, {subject}"
 		self.messages.append(post)
 		for user, conn in self.members.items():
-			conn.sendall(post_thumbnail.encode('utf-8'))
+			try:
+				conn.sendall(post_thumbnail.encode('utf-8'))
+			except Exception as e:
+				print(f"Failed to send message to {user}: {e}")
 
 	def _groupusers(self, username=None):
 		"""
