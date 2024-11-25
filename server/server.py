@@ -52,9 +52,15 @@ class Server:
 						self.bulletinboards[request["group"]]._groupusers()
 						self.bulletinboards[request["group"]]._send_prev_two_messages(username)
 					case "%grouppost":
-						subject = request["subject"]
-						message = request["message"]
-						self.bulletinboards[request["group"]]._grouppost(username, subject, message)
+						try:
+							group = request["group"]
+							subject = request["subject"]
+							message = request["message"]
+							self.bulletinboards[request["group"]]._grouppost(username, subject, message)
+						except PermissionError as e:
+							conn.sendall(f"Error: {str(e)}\n".encode('utf-8'))
+						except KeyError:
+							conn.sendall(f"Error: Group '{group}' does not exist.\n".encode('utf-8'))
 					case "%groupusers":
 						group = request["group"]
 						self.bulletinboards[group]._groupusers(username)
