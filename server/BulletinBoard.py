@@ -48,6 +48,9 @@ class BulletinBoard:
 		"""
 		removes the user from the group. also needs to send the updated user list to everyone in the group
 		"""
+		if username not in self.members:
+			raise PermissionError(f"User '{username}' is not a member of this group.")
+		
 		del self.members[username]
 
 	def _groupmessage(self, username, message_id):

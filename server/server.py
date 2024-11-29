@@ -65,9 +65,14 @@ class Server:
 						group = request["group"]
 						self.bulletinboards[group]._groupusers(username)
 					case "%groupleave":
-						group = request["group"]
-						self.bulletinboards[group]._groupleave(username)
-						self.bulletinboards[group]._groupusers()
+						try:
+							group = request["group"]
+							self.bulletinboards[group]._groupleave(username)
+							self.bulletinboards[group]._groupusers()
+						except PermissionError as e:
+							conn.sendall(f"Error: {str(e)}\n".encode('utf-8'))
+						except KeyError:
+							conn.sendall(f"Error: Group '{group}' does not exist.\n".encode('utf-8'))
 					case "%groupmessage":
 						try:
 							group = request["group"]
