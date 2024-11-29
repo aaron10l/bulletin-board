@@ -33,6 +33,10 @@ class BulletinBoard:
 		gets the list of users in the group and sends it to the user. if no user is provided send to all members.
 		"""
 		user_list = ', '.join(self.members.keys())
+
+		if not user_list:
+			return
+		
 		if not username:
 			for user, conn in self.members.items():
 				conn.sendall(f"users: {user_list}".encode('utf-8'))
