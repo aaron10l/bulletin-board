@@ -7,7 +7,7 @@ import json
 class Server:
 	def __init__(self):
 		self.bulletinboards = {"default": BulletinBoard(),
-						 		"group1": BulletinBoard(),
+								 "group1": BulletinBoard(),
 								"group2": BulletinBoard(),
 								"group3": BulletinBoard(),
 								"group4": BulletinBoard(),
@@ -69,9 +69,14 @@ class Server:
 						self.bulletinboards[group]._groupleave(username)
 						self.bulletinboards[group]._groupusers()
 					case "%groupmessage":
-						group = request["group"]
-						message_id = request["message_id"]
-						self.bulletinboards[group]._groupmessage(username, message_id)
+						try:
+							group = request["group"]
+							message_id = request["message_id"]
+							self.bulletinboards[group]._groupmessage(username, message_id)
+						except PermissionError as e:
+							conn.sendall(f"Error: {str(e)}\n".encode('utf-8'))
+						except KeyError:
+							conn.sendall(f"Error: Group '{group}' does not exist.\n".encode('utf-8'))
 					case "%exit":
 						for group in self.bulletinboards:
 							if username in self.bulletinboards[group].members:

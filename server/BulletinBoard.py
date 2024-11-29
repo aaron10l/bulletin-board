@@ -54,6 +54,9 @@ class BulletinBoard:
 		"""
 		sends the user the message with the given id
 		"""
+		if username not in self.members:
+			raise PermissionError(f"User '{username}' is not a member of this group.")
+			return
 		message_index = int(message_id) - 1
 		if 0 <= message_index < len(self.messages):
 			conn = self.members[username]
