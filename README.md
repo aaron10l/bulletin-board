@@ -46,7 +46,7 @@ This project implements a client-server bulletin board system using unicast sock
 
 ### General Commands
 
-%connect 127.0.0.1 65432 : Connect to the server.
+%connect 127.0.0.1 65432 : Connect to the server. // The IP address should the IP address of the server and the port should be the one to connect to.
 
 %exit : Disconnect from the server
 
@@ -81,16 +81,20 @@ This project implements a client-server bulletin board system using unicast sock
 ### Server
 
 1. Navigate to the server directly.
-2.  Compile the server : gcc server.c -o server
-3.  Run the server: ./server 65432
+2. Run the server : python3 server.py 65432
 
 ### Client
 
 1. Navigate to the client directory.
-2. Compile the client: gcc client.c -o client
-3. Run the client: ./client 127.0.0.1 65432
+2. Run the client : python3 client.py 127.0.0.1 65432 
 
 ## Issues and Limitations
+
+1. The server might not handle a large number of simultaneous clients efficiently due to limitations in multithreading or network bandwidth.
+2. The clients might disconnect unexpectedly due to weak error handling.
+3. Synchronization issues may arise when multiple users join, leave, or post messages in the same group simultaneously.
+4. Messages and user data are not saved permanently.They are lost if the server is restarted unless persistence is implemented.
+
 
 ## Acknowledgements
 
