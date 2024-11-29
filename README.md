@@ -86,7 +86,7 @@ This project implements a client-server bulletin board system using unicast sock
 ### Client
 
 1. Navigate to the client directory.
-2. Run the client : python3 client.py 127.0.0.1 65432 
+2. Run the client : python3 client.py 
 
 ## Issues and Limitations
 
