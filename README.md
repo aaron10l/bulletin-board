@@ -51,7 +51,7 @@ This project implements a client-server bulletin board system using unicast sock
 %exit : Disconnect from the server
 
 ### Part 1: Public Message Board
-
+```
 %join: Join the public message board.
 
 %post ; <subject> ; <content>: Post a public message.
@@ -61,9 +61,10 @@ This project implements a client-server bulletin board system using unicast sock
 %message <message_id>: Retrieve a specific message by ID from default group.
 
 %leave: Leave the default group.
+```
 
 ### Part 2: Private Message Boards
-
+```
 %groups: List all available groups.
 
 %groupjoin <group_id/name>: Join a specific group.
@@ -75,6 +76,7 @@ This project implements a client-server bulletin board system using unicast sock
 %groupleave <group_id/name>: Leave a specific group.
 
 %groupmessage <group_id/name> <message_id>: Retrieve a specific group message by ID.
+```
 
 ## Installation and Execution
 Make sure the server is running before trying to connect with the client.
