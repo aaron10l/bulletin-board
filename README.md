@@ -54,13 +54,13 @@ This project implements a client-server bulletin board system using unicast sock
 
 %join: Join the public message board.
 
-%post <subject> <content>: Post a public message.
+%post ; <subject> ; <content>: Post a public message.
 
-%users: View all connected users.
+%users: View all connected users in default group.
 
-%message <message_id>: Retrieve a specific message by ID.
+%message <message_id>: Retrieve a specific message by ID from default group.
 
-%leave: Leave the public group.
+%leave: Leave the default group.
 
 ### Part 2: Private Message Boards
 
@@ -68,7 +68,7 @@ This project implements a client-server bulletin board system using unicast sock
 
 %groupjoin <group_id/name>: Join a specific group.
 
-%grouppost <group_id/name> <subject> <content>: Post a message to a specific group.
+%grouppost ; <group_id/name> ; <subject> ; <content>: Post a message to a specific group.
 
 %groupusers <group_id/name>: View users in a group.
 
@@ -77,23 +77,21 @@ This project implements a client-server bulletin board system using unicast sock
 %groupmessage <group_id/name> <message_id>: Retrieve a specific group message by ID.
 
 ## Installation and Execution
+Make sure the server is running before trying to connect with the client.
 
 ### Server
 
 1. Navigate to the server directly.
-2. Run the server : python3 server.py 65432
+2. Run the server : python3 server.py 
 
 ### Client
 
 1. Navigate to the client directory.
 2. Run the client : python3 client.py 
 
-## Issues and Limitations
-
-1. The server might not handle a large number of simultaneous clients efficiently due to limitations in multithreading or network bandwidth.
-2. The clients might disconnect unexpectedly due to weak error handling.
-3. Synchronization issues may arise when multiple users join, leave, or post messages in the same group simultaneously.
-4. Messages and user data are not saved permanently.They are lost if the server is restarted unless persistence is implemented.
+## Challenges We Encountered
+1. Synchronization issues may arise when multiple users join, leave, or post messages in the same group simultaneously.
+2. Messages and user data are not saved permanently. They are lost if the server is restarted unless persistence is implemented.
 
 
 ## Acknowledgements
