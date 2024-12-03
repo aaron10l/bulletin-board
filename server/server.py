@@ -4,9 +4,17 @@ from BulletinBoard import BulletinBoard
 import json
 
 class Server:
+	"""
+    A server implementation for managing multiple bulletin board groups.
+    Handles:
+	- User connections
+	- Group management
+	- Message broadcasting
+    """
 	def __init__(self):
 		"""
-		initializes the different message/bulletin boards
+		Initialize some default bulletin boards where each group is an instance
+		of the BulletinBoard class
 		"""
 		self.bulletinboards = {"default": BulletinBoard(),
 								 "group1": BulletinBoard(),
@@ -16,7 +24,11 @@ class Server:
 								"group5": BulletinBoard()}
 
 	def run(self):
-		# server configurations. can be modified 
+		"""
+        - Start server to listen for incoming client connections.
+        - Spawns a new thread for each client to handle their requests.
+        """
+		# Server configurations
 		HOST = '127.0.0.1'
 		PORT = 65432
 
@@ -26,16 +38,25 @@ class Server:
 		server_socket.listen()
 		print(f"server started on host {HOST} and port {PORT}")
 
-		# when server recieves a new connection request, spawns it off in a new thread and goes back to listening
+		# Continuously listening for new connections
 		while True:
 			conn, addr = server_socket.accept()
 			print(f"connected to {addr}")
 
+			# Handle the client connection in a new thread
 			thread = threading.Thread(target=self.handle_client, args=(conn,))
 			thread.start()
 
 	def handle_client(self, conn):
-		# handling %connect command
+		"""
+        - Handles communication with connected client.
+        - Processes user commands and routes them to appropriate bulletin board.
+
+        Handles:
+            %groupjoin, %grouppost, %groupusers, %groupleave, %groupmessage, %exit, %groups
+        """
+
+		# Handle username input
 		conn.sendall(b"Enter a username: \n")
 		username = conn.recv(1024).decode('utf-8').strip()
 
@@ -46,6 +67,7 @@ class Server:
 					conn.sendall(b"username already exists, please choose another username: \n")
 					username = conn.recv(1024).decode('utf-8').strip()
 		
+		# Main loop to process client requests
 		while True:
 			try:
 				# recieve requests from the client and print them on server side for logging
@@ -125,16 +147,13 @@ class Server:
 						sends the list of joinable groups to the requesting user.
 						"""
 						groups = ', '.join(self.bulletinboards.keys())
-						conn.sendall(f"avaliable groups: {groups}".encode('utf-8'))
+						conn.sendall(f"available groups: {groups}".encode('utf-8'))
 
 			except:
+				# Handle abrupt disconnection or invalid input
 				break
 
 if __name__ == "__main__":
+	# Initialize and run the server
 	server = Server()
 	server.run()
-	
-# TODO:
-# block users from sending a message to a group they aren't in
-# add functionality to show users prev 2 messages when they join a group
-# debug everything
