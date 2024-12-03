@@ -3,6 +3,9 @@ import threading
 import json
 
 def receive_messages(sock):
+	"""
+	continuously reads messages from the server and prints output on client side
+	"""
 	while True:
 		try:
 			message = sock.recv(1024).decode('utf-8')
@@ -15,15 +18,35 @@ def receive_messages(sock):
 			break
 
 def run():
+	"""
+	this function runs continuously and it's main purpose is to parse the text the user types, 
+	and format it in a json-like way to send it to the server. this ensures that we stop errors before they
+	even reach the server.
+
+	this is basically the format of every request sent to the server:
+	{
+		"command": ...,
+		"command specific fields (group, message, subject, etc...)": ...,
+	}
+	"""
 	client_socket = None
 	while True:
+		# parsing the command the user types
 		command = input("> ")
 		command_args = command.split()
-		if command_args[0] == "%connect":
+
+		# matching the first command argument (should be the command) to one of the possible request types
+		# to be sent to the server
+		if not command_args:
+			print("no valid command found")
+			continue
+		elif command_args[0] == "%connect":
 			if len(command_args) != 3:
 				print("usage: %connect <host> <port>")
 				continue
 			HOST, PORT = str(command_args[1]), int(command_args[2])
+			# attempting to connect to the server and spawns off a new thread that recieves messages from the server. 
+			# note that this thread runs on the CLIENT side.
 			try:
 				client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				client_socket.connect((HOST, PORT))
@@ -103,7 +126,7 @@ def run():
 			request = {"command": "%groupmessage", "group": command_args[1], "message_id": int(command_args[2])}
 			client_socket.sendall(json.dumps(request).encode('utf-8'))
 		else:
-			# username being sent
+			# handling username being sent (when initializing a new user)
 			client_socket.sendall(command.encode('utf-8'))
 
 

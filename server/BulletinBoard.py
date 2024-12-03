@@ -6,7 +6,7 @@ class BulletinBoard:
 
 	def _groupjoin(self, username, conn):
 		"""
-		adds a user to the group. 	
+		adds a user to the group. Doesn't allow if user is already in the group.
 		"""
 		if username in self.members:
 			raise PermissionError("user {username} is already a member of this group.")
