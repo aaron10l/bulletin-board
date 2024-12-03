@@ -48,9 +48,14 @@ class Server:
 				print(f"recieved request : {request}")
 				match request["command"]:
 					case "%groupjoin":
-						self.bulletinboards[request["group"]]._groupjoin(username, conn)
-						self.bulletinboards[request["group"]]._groupusers()
-						self.bulletinboards[request["group"]]._send_prev_two_messages(username)
+						try:
+							self.bulletinboards[request["group"]]._groupjoin(username, conn)
+							self.bulletinboards[request["group"]]._groupusers()
+							self.bulletinboards[request["group"]]._send_prev_two_messages(username)
+						except PermissionError as e:
+							conn.sendall(f"Error: {str(e)}\n".encode('utf-8'))
+						except KeyError:
+							conn.sendall(f"Error: Group '{group}' does not exist.\n".encode('utf-8'))
 					case "%grouppost":
 						try:
 							group = request["group"]

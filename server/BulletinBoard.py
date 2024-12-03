@@ -1,13 +1,15 @@
 from datetime import datetime
 class BulletinBoard:
 	def __init__(self):
-		self.messages = []
+		self.messages = [] # holds the messages in order for the bulletin board
 		self.members = {} # username: conn
 
 	def _groupjoin(self, username, conn):
 		"""
-		adds a user to the group. also needs to send the updated user list to everyone in the group
+		adds a user to the group. 	
 		"""
+		if username in self.members:
+			raise PermissionError("user {username} is already a member of this group.")
 		self.members[username] = conn
 
 	def _grouppost(self, username, subject, message):
