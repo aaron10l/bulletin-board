@@ -67,6 +67,7 @@ class Server:
 						except PermissionError as e:
 							conn.sendall(f"Error: {str(e)}\n".encode('utf-8'))
 						except KeyError:
+							group = request["group"]
 							conn.sendall(f"Error: Group '{group}' does not exist.\n".encode('utf-8'))
 					case "%grouppost":
 						"""

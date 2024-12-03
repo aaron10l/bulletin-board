@@ -30,6 +30,7 @@ def run():
 	}
 	"""
 	client_socket = None
+	name_sent = False
 	while True:
 		# parsing the command the user types
 		command = input("> ")
@@ -125,9 +126,13 @@ def run():
 				continue
 			request = {"command": "%groupmessage", "group": command_args[1], "message_id": int(command_args[2])}
 			client_socket.sendall(json.dumps(request).encode('utf-8'))
+		elif command_args[0] and name_sent: # if the user enters a command that isnt valid AND they arent sending their name to the server...
+			print("command not found")
+			continue
 		else:
 			# handling username being sent (when initializing a new user)
 			client_socket.sendall(command.encode('utf-8'))
+			name_sent = True # marking that the user has sent their name to the server. this else statement should only execute once 
 
 
 
