@@ -1,8 +1,20 @@
 from datetime import datetime
 class BulletinBoard:
+	"""
+    The bulletin board group for the chat.
+    Handles:
+	- Group membership
+	- Messaging
+	- Retrieving user and message data.
+    """
 	def __init__(self):
+		"""
+        Initialize empty bulletin board.
+        - messages: List of messages posted in the group.
+        - members: Dictionary of username: connection pairs for active group members.
+        """
 		self.messages = [] # holds the messages in order for the bulletin board
-		self.members = {} # username: conn
+		self.members = {} # track members and their connections
 
 	def _groupjoin(self, username, conn):
 		"""
@@ -19,11 +31,13 @@ class BulletinBoard:
 		if username not in self.members:
 			raise PermissionError(f"User '{username}' is not a member of this group.")
 
+		# Create new post
 		post_id = len(self.messages) + 1
 		post_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		post = f"{post_id}, {username}, {post_date}, {subject}, {message}"
 		post_thumbnail = f"{post_id}, {username}, {post_date}, {subject}"
 		self.messages.append(post)
+		# Broadcast the post thumbnail to all group members
 		for user, conn in self.members.items():
 			try:
 				conn.sendall(post_thumbnail.encode('utf-8'))
@@ -36,13 +50,15 @@ class BulletinBoard:
 		"""
 		user_list = ', '.join(self.members.keys())
 
-		if not user_list:
+		if not user_list: #no users in group
 			return
 		
 		if not username:
+			# Broadcast the user list to all members
 			for user, conn in self.members.items():
 				conn.sendall(f"users: {user_list} \n".encode('utf-8'))
 		else:
+			# Send the user list to a specific user
 			conn = self.members[username]
 			conn.sendall(f"users: {user_list} \n".encode('utf-8'))
 
@@ -53,6 +69,7 @@ class BulletinBoard:
 		if username not in self.members:
 			raise PermissionError(f"User '{username}' is not a member of this group.")
 		
+		# Remove the user from the group
 		del self.members[username]
 
 	def _groupmessage(self, username, message_id):
@@ -64,9 +81,11 @@ class BulletinBoard:
 			return
 		message_index = int(message_id) - 1
 		if 0 <= message_index < len(self.messages):
+			# Send the requested message to the user
 			conn = self.members[username]
 			conn.sendall(self.messages[message_index].encode('utf-8'))
 		else:
+			# Notify the user if the message ID is invalid
 			conn = self.members[username]
 			conn.sendall(f"message not found, should be in the range 1 - {len(self.messages)}, inclusive.\n".encode('utf-8'))
 
