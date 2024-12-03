@@ -41,7 +41,7 @@ def run():
 		elif command_args[0] == "%post":
 			post_command_args = command.split(";")
 			if len(post_command_args) != 3:
-				print("usage: %post ; subject ; <message> ; ")
+				print("usage: %post ; subject ; <message>")
 				continue
 			request = {"command": "%grouppost", "group": "default", "subject": post_command_args[1].strip(), "message": post_command_args[2].strip()}
 			client_socket.sendall(json.dumps(request).encode('utf-8'))
@@ -80,7 +80,7 @@ def run():
 		elif command_args[0] == "%grouppost":
 			post_command_args = command.split(";")
 			if len(post_command_args) != 4:
-				print("usage: %grouppost ; <groupname> ; <subject> ; <message> ; ")
+				print("usage: %grouppost ; <groupname> ; <subject> ; <message>")
 				continue
 			request = {"command": "%grouppost", "group": post_command_args[1].strip(), "subject": post_command_args[2].strip(), "message": post_command_args[3].strip()}
 			client_socket.sendall(json.dumps(request).encode('utf-8'))
