@@ -41,10 +41,10 @@ class BulletinBoard:
 		
 		if not username:
 			for user, conn in self.members.items():
-				conn.sendall(f"users: {user_list}".encode('utf-8'))
+				conn.sendall(f"users: {user_list} \n".encode('utf-8'))
 		else:
 			conn = self.members[username]
-			conn.sendall(f"users: {user_list}".encode('utf-8'))
+			conn.sendall(f"users: {user_list} \n".encode('utf-8'))
 
 	def _groupleave(self, username):
 		"""
@@ -79,7 +79,7 @@ class BulletinBoard:
 
 		conn = self.members[username]
 		if len(self.messages) >= 2:
-			conn.sendall(self.messages[len(self.messages) - 2].encode('utf-8'))
-			conn.sendall(self.messages[len(self.messages) - 1].encode('utf-8'))
+			conn.sendall((self.messages[len(self.messages) - 2] + '\n').encode('utf-8'))
+			conn.sendall((self.messages[len(self.messages) - 1] + '\n').encode('utf-8'))
 		elif len(self.messages) == 1:
-			conn.sendall(self.messages[0].encode('utf-8'))
+			conn.sendall((self.messages[0] + '\n').encode('utf-8'))
